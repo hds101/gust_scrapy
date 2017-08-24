@@ -10,6 +10,7 @@ class GustCompany(Item):
     overview = Field()
     data = Field()
 
+
 class GustUser(Item):
     company = Field()
     tag = Field()

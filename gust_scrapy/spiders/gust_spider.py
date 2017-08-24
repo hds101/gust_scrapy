@@ -1,26 +1,28 @@
 # -*- coding: utf-8 -*-
 
 import re
-
-from scrapy.shell import inspect_response
-
+from scrapy import Request
 from gust_scrapy.spiders.init import InitSpider
 from gust_scrapy.items import GustCompany, GustUser
 
 
 class GustSpider(InitSpider):
     name = 'gust'
-    start_urls = [
-        'https://gust.com/search/new?category=startups&page=1&partial=results',
-    ]
+
+    def __init__(self, start_at=1, stop_at=3, *args, **kwargs):
+        super(GustSpider, self).__init__(*args, **kwargs)
+        self.start_at = start_at
+        self.start_urls = [
+            "https://gust.com/search/new?category=startups&page={start_at}&partial=results".format(start_at=start_at)
+        ]
+        self.stop_at = "/search/new?category=startups&page={stop_at}&partial=results".format(stop_at=(int(stop_at) + 1))
 
     def parse(self, response):
         for href in response.css('.card-title > a::attr(href)'):
             yield response.follow(href, self.parse_company)
 
-        stop_on = 3
         next_page = response.css('ul.pagination li.last')[0].css('a::attr(href)').extract_first()
-        if (next_page != ('/search/new?category=startups&page=%s&partial=results' % stop_on)) and next_page is not None:
+        if (next_page != self.stop_at) and next_page is not None:
             yield response.follow(next_page, callback=self.parse)
 
     def parse_company(self, response):

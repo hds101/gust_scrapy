@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import os
-
 from scrapy import Spider
+
 
 class ProxySpider(Spider):
     name = 'proxy'
