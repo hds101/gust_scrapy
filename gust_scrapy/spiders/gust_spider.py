@@ -2,6 +2,8 @@
 
 import re
 
+from scrapy.shell import inspect_response
+
 from gust_scrapy.spiders.init import InitSpider
 from gust_scrapy.items import GustCompany, GustUser
 
@@ -61,10 +63,10 @@ class GustSpider(InitSpider):
         user['name'] = self.__extract(response, '#user_profile .profile .card-title::text')
         user['location'] = self.__extract(response, '#user_profile .profile .card-subtitle > div > span::text')
         user['role'] = self.__extract(response, '#user_profile .profile .card-subtitle > p::text')
-        user['website'] = self.__extract(response, '#contact_info .list-group-item .value.value--fixed-width.ellipsis a::attr(href)')
+        user['website'] = self.__extract(response, '#contact_info .list-group-item:nth-child(1) .value a::attr(href)')
 
-        bio = self.__extract(response, '#user_profile #biography .value .rest::text')
         try:
+            bio = ' '.join(response.css('#user_profile #biography .value .rest .active.hidden p::text').extract())
             user['biography'] = re.sub(r'Show\sLess$', '', bio).strip()
         except NoneType:
             user['biography'] = None
@@ -72,7 +74,7 @@ class GustSpider(InitSpider):
         user['social_linkedin'] = None
         user['social_twitter'] = None
         user['social_facebook'] = None
-        social_links = response.css('#contact_info .list-group-item .value a.gust-margin--tiny--left::attr(href)').extract_first()
+        social_links = response.css('#contact_info .list-group-item:nth-child(2) .value a::attr(href)').extract()
         if social_links is not None:
             for link in social_links:
                 if link is not None and 'linkedin.com' in link:

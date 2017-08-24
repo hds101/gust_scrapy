@@ -101,7 +101,7 @@ def load_lines(path):
 
 ROTATING_PROXY_LIST = load_lines('proxies')
 
-ROTATING_PROXY_PAGE_RETRY_TIMES = 80
+ROTATING_PROXY_PAGE_RETRY_TIMES = 100
 
 DOWNLOADER_MIDDLEWARES = {
     'rotating_proxies.middlewares.RotatingProxyMiddleware': 610,
