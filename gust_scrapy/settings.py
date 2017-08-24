@@ -91,13 +91,14 @@ TELNETCONSOLE_ENABLED = False
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 def load_lines(path):
-    with open(path, 'rb') as f:
-        return [line.strip() for line in
-                f.read().decode('utf8').splitlines()
-                if line.strip()]
+    try:
+        with open(path, 'rb') as f:
+            return [line.strip() for line in
+                    f.read().decode('utf8').splitlines()
+                    if line.strip()]
+    except FileNotFoundError:
+        None
 
-# https://www.sslproxies.org/
-# \d+\.\d+\.\d+\.\d+\s+\d+
 ROTATING_PROXY_LIST = load_lines('proxies')
 
 ROTATING_PROXY_PAGE_RETRY_TIMES = 80

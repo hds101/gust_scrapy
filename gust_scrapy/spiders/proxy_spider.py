@@ -17,11 +17,13 @@ class ProxySpider(Spider):
     ]
 
     def parse(self, response):
-        os.remove('proxies')
+        try:
+            os.remove('proxies')
+        except FileNotFoundError:
+            pass
+
         for row in response.css('table.table tbody tr'):
             ip = row.css('td:nth-child(1)::text').extract_first()
             port = row.css('td:nth-child(2)::text').extract_first()
-            proxy = "https://{ip}:{port}\n".format(ip=ip, port=port)
-            print(proxy)
             with open('proxies', 'a') as f:
-                f.write(proxy)
+                f.write("https://{ip}:{port}\n".format(ip=ip, port=port))

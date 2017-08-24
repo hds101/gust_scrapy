@@ -1,9 +1,7 @@
 Install the following packages with pip:
 
-    scrapy
-    scrapy-rotating-proxies
+    pip install -r requirements.txt
 
-
-Next, place a list of proxies  into the project's root directory. It should be named `proxies` and formatted as `https://IP:PORT`
+Next, place a list of proxies into the project's root directory, it should be named `proxies` and formatted as `https://IP:PORT`. Or just run `scrapy crawl proxy`
 
 Then run `scrapy crawl gust -o gust.json`

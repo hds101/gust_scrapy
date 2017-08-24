@@ -9,14 +9,14 @@ from gust_scrapy.items import GustCompany, GustUser
 class GustSpider(InitSpider):
     name = 'gust'
     start_urls = [
-        'https://gust.com/search/new?category=startups&page=371&partial=results',
+        'https://gust.com/search/new?category=startups&page=1&partial=results',
     ]
 
     def parse(self, response):
         for href in response.css('.card-title > a::attr(href)'):
             yield response.follow(href, self.parse_company)
 
-        stop_on = 372
+        stop_on = 3
         next_page = response.css('ul.pagination li.last')[0].css('a::attr(href)').extract_first()
         if (next_page != ('/search/new?category=startups&page=%s&partial=results' % stop_on)) and next_page is not None:
             yield response.follow(next_page, callback=self.parse)
