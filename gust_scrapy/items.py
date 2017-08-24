@@ -1,19 +1,24 @@
 # -*- coding: utf-8 -*-
 
-# Define here the models for your scraped items
-#
-# See documentation in:
-# http://doc.scrapy.org/en/latest/topics/items.html
-
-import scrapy
+from scrapy import Item, Field
 
 
-class GustCompany(scrapy.Item):
-    url = scrapy.Field()
-    name = scrapy.Field()
-    slogan = scrapy.Field()
-    overview = scrapy.Field()
-    data = scrapy.Field()
+class GustCompany(Item):
+    url = Field()
+    name = Field()
+    slogan = Field()
+    overview = Field()
+    data = Field()
 
-class GustUser(scrapy.Item):
-    pass
+class GustUser(Item):
+    company = Field()
+    tag = Field()
+    url = Field()
+    name = Field()
+    location = Field()
+    role = Field()
+    biography = Field()
+    website = Field()
+    social_linkedin = Field()
+    social_twitter = Field()
+    social_facebook = Field()
