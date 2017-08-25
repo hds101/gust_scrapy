@@ -23,7 +23,9 @@ class PgPipeline(object):
             company = GustCompany(**item['company'])
             session.add(company)
 
-        company.gust_users.append(GustUser(**item['user']))
+        user = session.query(GustUser).filter_by(url=item['user']['url']).first()
+        if not user:
+            company.gust_users.append(GustUser(**item['user']))
 
         try:
             session.commit()
