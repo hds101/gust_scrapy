@@ -3,16 +3,27 @@
 from scrapy import Item, Field
 
 
+class GustMaster(Item):
+    company = Field()
+    user = Field()
+
+
 class GustCompany(Item):
     url = Field()
     name = Field()
     slogan = Field()
     overview = Field()
-    data = Field()
+    industry = Field()
+    location = Field()
+    currency = Field()
+    founded = Field()
+    employees = Field()
+    stage = Field()
+    website = Field()
+    incorporation_type = Field()
 
 
 class GustUser(Item):
-    company = Field()
     tag = Field()
     url = Field()
     name = Field()

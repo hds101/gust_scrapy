@@ -1,2 +1,4 @@
+SQLAlchemy
+psycopg2
 scrapy
 scrapy-rotating-proxies

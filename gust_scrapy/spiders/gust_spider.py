@@ -3,7 +3,7 @@
 import re
 from scrapy import Request
 from gust_scrapy.spiders.init import InitSpider
-from gust_scrapy.items import GustCompany, GustUser
+from gust_scrapy.items import GustMaster, GustCompany, GustUser
 
 
 class GustSpider(InitSpider):
@@ -26,10 +26,10 @@ class GustSpider(InitSpider):
             yield response.follow(next_page, callback=self.parse)
 
     def parse_company(self, response):
+        master = GustMaster()
         company = GustCompany()
-        dynamic_fields = dict()
-        for item in response.css('#company_info ul.list-group li.list-group-item'):
 
+        for item in response.css('#company_info ul.list-group li.list-group-item'):
             key = item.css('::text').extract_first().split()[0].lower().strip()
             value = item.css('span.value::text').extract_first().strip()
 
@@ -38,27 +38,28 @@ class GustSpider(InitSpider):
             elif key == 'incorporation':
                 key = 'incorporation_type'
 
-            dynamic_fields[key] = value
+            company[key] = value
 
         company['url'] = response.url
         company['name'] = self.__extract(response, '#company_info h2::text')
         company['slogan'] = self.__extract(response, '#company_info p.quote::text')
         company['overview'] = self.__extract(response, '#company_overview .panel-body > p::text')
-        company['data'] = dynamic_fields
+
+        master['company'] = dict(company)
 
         for user in response.css('#startup_content > .panel #management .card-title a::attr(href)'):
-            yield response.follow(user, callback=self.parse_user, meta={'company': dict(company), 'tag': 'Team'})
+            yield response.follow(user, callback=self.parse_user, meta={'master': master, 'tag': 'Team'})
 
         for user in response.css('#startup_content > .panel #advisors .card-title a::attr(href)'):
-            yield response.follow(user, callback=self.parse_user, meta={'company': dict(company), 'tag': 'Advisors'})
+            yield response.follow(user, callback=self.parse_user, meta={'master': master, 'tag': 'Advisors'})
 
         for user in response.css('#startup_content > .panel #investor .card-title a::attr(href)'):
-            yield response.follow(user, callback=self.parse_user, meta={'company': dict(company), 'tag': 'Previous Investors'})
+            yield response.follow(user, callback=self.parse_user, meta={'master': master, 'tag': 'Previous Investors'})
 
     def parse_user(self, response):
+        master = response.meta['master']
         user = GustUser()
 
-        user['company'] = response.meta['company']
         user['tag'] = response.meta['tag']
         user['url'] = response.url
 
@@ -86,7 +87,9 @@ class GustSpider(InitSpider):
                 elif link is not None and 'facebook.com' in link:
                     user['social_facebook'] = link.strip()
 
-        yield user
+        master['user'] = dict(user)
+
+        yield master
 
     def __extract(self, response, selector):
         try:

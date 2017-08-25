@@ -28,7 +28,7 @@ CONCURRENT_REQUESTS = 16
 # Configure a delay for requests for the same website (default: 0)
 # See http://scrapy.readthedocs.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-DOWNLOAD_DELAY = 1
+DOWNLOAD_DELAY = 0
 # The download delay setting will honor only one of:
 # CONCURRENT_REQUESTS_PER_DOMAIN = 16
 # CONCURRENT_REQUESTS_PER_IP = 16
@@ -66,7 +66,7 @@ TELNETCONSOLE_ENABLED = False
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-   'gust_scrapy.pipelines.JsonPipeline': 300,
+   'gust_scrapy.pipelines.PgPipeline': 300,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -107,4 +107,14 @@ ROTATING_PROXY_PAGE_RETRY_TIMES = 100
 DOWNLOADER_MIDDLEWARES = {
     'rotating_proxies.middlewares.RotatingProxyMiddleware': 610,
     'rotating_proxies.middlewares.BanDetectionMiddleware': 620,
+}
+
+
+DATABASE = {
+    'drivername': 'postgres',
+    'host': 'localhost',
+    'port': '5432',
+    'username': 'postgres',
+    'password': 'postgres',
+    'database': 'scrape'
 }
