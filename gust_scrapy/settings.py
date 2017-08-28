@@ -114,7 +114,7 @@ DATABASE = {
     'drivername': 'postgres',
     'host': 'localhost',
     'port': '5432',
-    'username': 'postgres',
-    'password': 'postgres',
-    'database': 'scrape'
+    # 'username': 'postgres',
+    # 'password': 'postgres',
+    'database': 'spider_production'
 }
