@@ -112,7 +112,7 @@ DOWNLOADER_MIDDLEWARES = {
 
 DATABASE = {
     'drivername': 'postgres',
-    'host': 'localhost',
+    # 'host': 'localhost',
     'port': '5432',
     # 'username': 'postgres',
     # 'password': 'postgres',
