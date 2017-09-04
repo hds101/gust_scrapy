@@ -6,12 +6,8 @@ from scrapy import Spider
 
 class ProxySpider(Spider):
     name = 'proxy'
-    custom_settings = {
-        "DOWNLOADER_MIDDLEWARES": {
-            'rotating_proxies.middlewares.RotatingProxyMiddleware': 610,
-            'rotating_proxies.middlewares.BanDetectionMiddleware': 620,
-        },
-    }
+    custom_settings = { 'DOWNLOADER_MIDDLEWARES': {} }
+
     start_urls = [
         'https://www.sslproxies.org/'
     ]
